@@ -1,0 +1,23 @@
+@import '../../node_modules/element-plus/theme-chalk/src/dark/css-vars';
+
+html.dark {
+	//变量
+	--el-text-color-primary: #d0d0d0;
+	--el-color-primary-dark-2: var(--el-color-primary-light-2) !important;
+	--el-color-primary-light-9: var(--el-color-primary-dark-8) !important;
+	--el-color-primary-light-8: var(--el-color-primary-dark-7) !important;
+	--el-color-primary-light-7: var(--el-color-primary-dark-6) !important;
+	--el-color-primary-light-5: var(--el-color-primary-dark-4) !important;
+	--el-color-primary-light-3: var(--el-color-primary-dark-3) !important;
+
+	//背景
+	#app {background: var(--el-bg-color);}
+
+	//组件
+	.el-header, .el-main.nopadding, .el-footer {background: var(--el-bg-color-overlay);border-color: var(--el-border-color-light);}
+	.el-main {background: var(--el-bg-color);}
+	.el-aside {background: var(--el-bg-color-overlay);border-color: var(--el-border-color-light);}
+	.el-table .el-table__body-wrapper {background: var(--el-bg-color);}
+	.el-table th.is-sortable:hover {background: #111;}
+	.el-divider__text {background: var(--el-bg-color-overlay);}
+}
