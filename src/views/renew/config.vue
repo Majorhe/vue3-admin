@@ -1,12 +1,10 @@
 <template>
-  <div>
-    system menu
-  </div>
+  <div>renew config</div>
 </template>
 
 <script>
 export default {
-  name: 'menu-list'
+  name: "renew-config"
 }
 </script>
 

@@ -3,54 +3,64 @@
     <el-container class="layout-container">
       <el-aside width="270px" class="d-flex">
         <div class="first-menu-wrapper">
-          <el-image :src="require('@/assets/logo.png')" fit="contain" style="width: 100%; height: 44px"></el-image>
-          <div
-              v-for="(menu, index) in menuList"
-              :key="index"
-              :class="{'first-menu-item': true, 'active': activeIndex == index}"
-              @click="activeIndex = index"
-          >
-            <el-icon class="first-menu-icon">
-              <component :is="menu.icon" />
-            </el-icon>
-            <span class="first-menu-title">{{ menu.title }}</span>
+          <div style="width: 100%; height: 44px">
+            <el-image :src="require('@/assets/logo.png')" fit="contain" style="width: 100%; height: 30px"></el-image>
+          </div>
+          <div style="height: calc(100vh - 95px)">
+            <el-scrollbar>
+              <div
+                  v-for="(menu, index) in menuList"
+                  :key="index"
+                  :class="{'first-menu-item': true, 'active': activeIndex == index}"
+                  @click="activeIndex = index"
+              >
+                <el-icon class="first-menu-icon">
+                  <component :is="menu.icon" />
+                </el-icon>
+                <span class="first-menu-title">{{ menu.title }}</span>
+              </div>
+            </el-scrollbar>
           </div>
         </div>
         <div>
           <div class="menu-header">
-            <h3 class="text-align-center">Vue3 Admin</h3>
+            <h3 class="text-align-center">{{ title }}</h3>
             <el-divider class="menu-header-divider">
               {{ menuList[activeIndex].title }}
             </el-divider>
           </div>
-          <el-menu :default-active="activeMenu" :collapse="isCollapse" @select="handleMenuSelect" class="menu">
-              <template v-for="(subMenu, index) in showMenu" :key="index">
-                <el-menu-item v-if="subMenu.leaf" :index="subMenu.name">
-                  <template #title>
-                    <el-icon>
-                      <component :is="subMenu.icon" />
-                    </el-icon>
-                    <span>{{ subMenu.title }}</span>
-                  </template>
-                </el-menu-item>
-                <el-sub-menu v-else>
-                  <template #title>
-                    <el-icon>
-                      <component :is="subMenu.icon" />
-                    </el-icon>
-                    <span>{{ subMenu.title }}</span>
-                  </template>
-                  <el-menu-item v-for="(thirdMenu, j) in subMenu.children" :key="index + '-' + k + '-' + j" :index="thirdMenu.name">
+          <div style="height: calc(100vh - 95px)">
+            <el-scrollbar>
+              <el-menu :default-active="activeMenu" :collapse="isCollapse" @select="handleMenuSelect" class="menu">
+                <template v-for="subMenu in showMenu" :key="subMenu.id">
+                  <el-menu-item v-if="subMenu.leaf" :index="subMenu.name">
                     <template #title>
                       <el-icon>
-                        <component :is="thirdMenu.icon" />
+                        <component :is="subMenu.icon" />
                       </el-icon>
-                      <span>{{ thirdMenu.title }}</span>
+                      <span>{{ subMenu.title }}</span>
                     </template>
                   </el-menu-item>
-                </el-sub-menu>
-              </template>
-          </el-menu>
+                  <el-sub-menu v-else :index="subMenu.name">
+                    <template #title>
+                      <el-icon>
+                        <component :is="subMenu.icon" />
+                      </el-icon>
+                      <span>{{ subMenu.title }}</span>
+                    </template>
+                    <el-menu-item v-for="thirdMenu in subMenu.children" :key="thirdMenu.id" :index="thirdMenu.name">
+                      <template #title>
+                        <el-icon>
+                          <component :is="thirdMenu.icon" />
+                        </el-icon>
+                        <span>{{ thirdMenu.title }}</span>
+                      </template>
+                    </el-menu-item>
+                  </el-sub-menu>
+                </template>
+              </el-menu>
+            </el-scrollbar>
+          </div>
         </div>
       </el-aside>
       <el-container>
@@ -90,7 +100,8 @@ export default {
   data() {
     return {
       activeIndex: 0,
-      breadcrumb: []
+      breadcrumb: [],
+      title: process.env.VUE_APP_NAME
     }
   },
   mounted() {
@@ -122,7 +133,7 @@ export default {
   background-color: var(--el-menu-bg-color);
 }
 .first-menu-wrapper {
-  padding: 10px 0 20px 0;
+  padding: 15px 0 20px 0;
   border-right: 1px solid var(--el-menu-border-color);
 
   .first-menu-item {

@@ -26,7 +26,7 @@ module.exports = defineConfig({
     proxy: {
       '/api': {
         // 此处的写法，目的是为了 将 /api 替换成 https://test.domain.com/
-        target: 'http://test.domain.com/',
+        target: 'https://xn--0zwm56d.lanmsz.com/',
         // 允许跨域
         changeOrigin: true,
         ws: true,

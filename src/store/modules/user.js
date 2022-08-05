@@ -1,6 +1,6 @@
 const state = () => ({
     isLogin: localStorage.getItem('userinfo') ? true : false,
-    userinfo: localStorage.getItem('userinfo') ? JSON.parse(localStorage.getItem('userinfo')) : undefined
+    userinfo: localStorage.getItem('userinfo') ? JSON.parse(localStorage.getItem('userinfo')) : undefined,
 })
 
 const getters = {
@@ -9,6 +9,9 @@ const getters = {
     },
     userinfo: (state) => {
         return state.userinfo
+    },
+    token: (state) => {
+        return state.userinfo ? state.userinfo.token : ''
     }
 }
 

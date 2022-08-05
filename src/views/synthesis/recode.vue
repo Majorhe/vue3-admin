@@ -1,12 +1,10 @@
 <template>
-  <div>
-    administrator list
-  </div>
+  <div>synthesis recode</div>
 </template>
 
 <script>
 export default {
-  name: 'account-list'
+  name: "synthesis-recode"
 }
 </script>
 

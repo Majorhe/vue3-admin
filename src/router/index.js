@@ -47,7 +47,7 @@ const routes = [
         ]
     },
     {
-        path: '/permission',
+        path: '/account',
         name: 'permission',
         meta: {
             title: '权限管理'
@@ -60,7 +60,7 @@ const routes = [
                 meta: {
                     title: '菜单'
                 },
-                component: () => import('@/views/acl/menu')
+                component: () => import('@/views/menu')
             },
             {
                 path: '/role',
@@ -68,7 +68,7 @@ const routes = [
                 meta: {
                     title: '角色'
                 },
-                component: () => import('@/views/acl/role')
+                component: () => import('@/views/role')
             },
             {
                 path: '/account',
@@ -76,8 +76,136 @@ const routes = [
                 meta: {
                     title: '管理员'
                 },
-                component: () => import('@/views/acl/account')
+                component: () => import('@/views/account')
             }
+        ]
+    },
+    {
+        path: '/user',
+        name: 'user',
+        meta: {
+            title: '用户管理'
+        },
+        component: Layout,
+        children: [
+            {
+                path: '/user',
+                name: 'userList',
+                meta: {
+                    title: '用户列表'
+                },
+                component: () => import('@/views/user')
+            },
+        ]
+    },
+    {
+        path: '/works',
+        name: 'works',
+        meta: {
+            title: '作品管理'
+        },
+        component: Layout,
+        children: [
+            {
+                path: '/works/list',
+                name: 'worksList',
+                meta: {
+                    title: '作品列表'
+                },
+                component: () => import('@/views/works')
+            },
+            {
+                path: '/token',
+                name: 'token',
+                meta: {
+                    title: '通证列表'
+                },
+                component: () => import('@/views/token')
+            },
+            {
+                path: '/category',
+                name: 'category',
+                meta: {
+                    title: '分类管理'
+                },
+                component: () => import('@/views/category')
+            },
+            {
+                path: '/issued',
+                name: 'issued',
+                meta: {
+                    title: '发售日历'
+                },
+                component: () => import('@/views/issued')
+            }
+        ]
+    },
+    {
+        path: '/activity',
+        name: 'activity',
+        meta: {
+            title: '活动管理'
+        },
+        component: Layout,
+        children: [
+            {
+                path: '/activity/list',
+                name: 'activityList',
+                meta: {
+                    title: '活动列表'
+                },
+                component: () => import('@/views/activity')
+            },
+            {
+                path: '/synthesis',
+                name: 'synthesis',
+                meta: {
+                    title: '合成管理'
+                },
+                children: [
+                    {
+                        path: '/synthesis/config',
+                        name: 'synthesisConfig',
+                        meta: {
+                            title: '合成配置'
+                        },
+                        component: () => import('@/views/synthesis/config')
+                    },
+                    {
+                        path: '/synthesis/recode',
+                        name: 'synthesisRecode',
+                        meta: {
+                            title: '合成记录'
+                        },
+                        component: () => import('@/views/synthesis/recode')
+                    },
+                ]
+            },
+            {
+                path: '/renew',
+                name: 'renew',
+                meta: {
+                    title: '换新管理'
+                },
+                children: [
+                    {
+                        path: '/renew/config',
+                        name: 'renewConfig',
+                        meta: {
+                            title: '换新配置'
+                        },
+                        component: () => import('@/views/renew/config')
+                    },
+                    {
+                        path: '/renew/recode',
+                        name: 'renewRecode',
+                        meta: {
+                            title: '换新记录'
+                        },
+                        component: () => import('@/views/renew/recode')
+                    },
+                ]
+            },
         ]
     }
 ]

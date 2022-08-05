@@ -1,12 +1,10 @@
 <template>
-  <div>
-    administrator role list
-  </div>
+  <div>synthesis config</div>
 </template>
 
 <script>
 export default {
-  name: 'role-list'
+  name: "synthesis-config"
 }
 </script>
 

@@ -1,10 +1,10 @@
 {
-  "name": "vue3-admin",
+  "name": "lanmsz-admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve --mode development",
+    "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -16,10 +16,12 @@
     "echarts": "^5.3.3",
     "element-plus": "^2.2.9",
     "mitt": "^3.0.0",
+    "moment": "^2.29.4",
     "qrcodejs2": "0.0.2",
     "sortablejs": "^1.15.0",
     "tinymce": "6.0.3",
     "vue": "^3.2.13",
+    "vue-clipboard3": "^2.0.0",
     "vue-i18n": "^9.1.10",
     "vue-router": "^4.1.2",
     "vuedraggable": "4.0.3",

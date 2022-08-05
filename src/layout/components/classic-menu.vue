@@ -3,8 +3,8 @@
     <el-container class="layout-container">
       <el-header class="no-padding">
         <div class="logo-wrapper d-flex flex-align-center">
-          <el-image :src="require('@/assets/logo.png')" style="width: 40px; height: 40px"></el-image>
-          <h3>VUE3 ADMIN</h3>
+          <el-image :src="require('@/assets/logo.png')" style="width: 30px; height: 30px"></el-image>
+          <h3 style="margin-left: 10px">{{ title }}</h3>
         </div>
         <div class="header-section-wrapper d-flex flex-justify-between flex-align-center">
           <el-breadcrumb separator-icon="ArrowRight">
@@ -13,7 +13,7 @@
           <header-section></header-section>
         </div>
       </el-header>
-      <el-container>
+      <el-container style="height: calc(100vh - 60px)">
         <el-aside width="210px">
           <el-menu
               :default-active="activeMenu"
@@ -21,14 +21,14 @@
               @select="handleMenuSelect"
               class="menu"
           >
-            <el-sub-menu v-for="(menu, index) in menuList" :key="index" :index="menu.name">
+            <el-sub-menu v-for="menu in menuList" :key="menu.id" :index="menu.name">
               <template #title>
                 <el-icon>
                   <component :is="menu.icon" />
                 </el-icon>
                 <span>{{ menu.title }}</span>
               </template>
-              <template v-for="(subMenu, k) in menu.children" :key="index + '-' + k">
+              <template v-for="subMenu in menu.children" :key="subMenu.id">
                 <el-menu-item v-if="subMenu.leaf" :index="subMenu.name">
                   <template #title>
                     <el-icon>
@@ -37,14 +37,14 @@
                     <span>{{ subMenu.title }}</span>
                   </template>
                 </el-menu-item>
-                <el-sub-menu v-else>
+                <el-sub-menu v-else :index="subMenu.name">
                   <template #title>
                     <el-icon>
                       <component :is="subMenu.icon" />
                     </el-icon>
                     <span>{{ subMenu.title }}</span>
                   </template>
-                  <el-menu-item v-for="(thirdMenu, j) in subMenu.children" :key="index + '-' + k + '-' + j" :index="thirdMenu.name">
+                  <el-menu-item v-for="thirdMenu in subMenu.children" :key="thirdMenu.id" :index="thirdMenu.name">
                     <template #title>
                       <el-icon>
                         <component :is="thirdMenu.icon" />
@@ -75,7 +75,8 @@ export default {
   components: {HeaderSection},
   data() {
     return {
-      breadcrumb: []
+      breadcrumb: [],
+      title: process.env.VUE_APP_NAME
     }
   },
   mounted() {

@@ -1,36 +1,30 @@
 import axios from 'axios'
 import store from '@/store'
-import Vue from 'vue'
-import router from '../router'
+import router from '@/router'
 
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 
-export const api = process.env.API
-export const version = process.env.VERSION
+// export const api = process.env.VUE_APP_API
+export const api = 'http://192.168.0.16/'
+export const prefix = process.env.VUE_APP_API_PREFIX
 
 export const request = (method = 'get', url = '/', params = {}) => {
     method = method.toLowerCase()
     return axios({
         method: `${method}`,
-        url: `${api}${version}${url}`,
+        url: `${api}${prefix}${url}`,
         data: params,
         params: (method === 'post' || method === 'put') ? {} : params,
-        headers: {'Content-Type': 'application/json', 'Fingerprint': store.getters['fingerprint/fingerprint'], 'Authorization': store.getters['token/token']},
+        headers: {'Content-Type': 'application/json', 'authorization': 'Bearer ' + store.getters['user/token']},
         timeout: 30000
     }).then(response => {
         // console.log('request data :::::::::', response)
         if (response.status === 200) {
             const data = response.data
-            if (data.code === 200) {
-                return Promise.resolve(data.data)
-            } else if (data.code === 400) {
-                Vue.prototype.$alert(data.message, '', {
-                    confirmButtonText: '确定',
-                    showClose: false,
-                    callback: () => {
-                        router.push({name: 'login'})
-                    }
-                })
+            if (data.errcode == undefined || data.errcode === 0) {
+                return Promise.resolve(data)
+            } else if (data.errcode === 401) {
+                router.push({name: 'login'})
                 return Promise.reject(data.message)
             } else {
                 return Promise.reject(data.message)

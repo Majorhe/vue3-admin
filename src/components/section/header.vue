@@ -13,8 +13,8 @@
     <div>
       <el-dropdown style="margin-left: 8px" @command="handleClick">
         <div class="d-flex flex-align-center">
-          <el-avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" :size="30"></el-avatar>
-          <span style="margin-left: 10px">{{ userinfo.username }}</span>
+          <el-icon :size="30"><AvatarCircle /></el-icon>
+          <span style="margin-left: 10px">{{ userinfo.name }}</span>
           <el-icon class="el-icon--right">
             <arrow-down/>
           </el-icon>
@@ -65,6 +65,7 @@ export default {
       switch (name) {
         case 'logout':
           this.$store.commit('user/logout');
+          localStorage.removeItem('menu_list')
           this.$router.push({name: 'login'})
           return;
         case 'userinfo':
