@@ -2,50 +2,39 @@
   <div class="d-flex flex-justify-between">
     <el-form :model="form" label-width="auto" class="d-flex">
       <el-form-item>
-        <el-select v-model="form.onsale" :placeholder="$t('works.selector.title')" style="margin-right: 10px">
-          <el-option value="-1" :label="$t('works.selector.options.0')"></el-option>
-          <el-option value="1" :label="$t('works.selector.options.1')"></el-option>
-          <el-option value="0" :label="$t('works.selector.options.2')"></el-option>
-          <el-option value="2" :label="$t('works.selector.options.3')"></el-option>
+        <el-select v-model="form.status" placeholder="作品状态" style="margin-right: 10px">
+          <el-option value="-1" label="已删除"></el-option>
+          <el-option value="0" label="待发布"></el-option>
+          <el-option value="1" label="待审核"></el-option>
+          <el-option value="2" label="审核成功"></el-option>
+          <el-option value="3" label="审核失败"></el-option>
+          <el-option value="4" label="已举报"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="form.author" :placeholder="$t('works.placeholder.0')" clearable style="width: 200px; margin-right: 10px;">
-        </el-input>
+        <el-input v-model="form.author" placeholder="作者" clearable style="width: 200px; margin-right: 10px;"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="form.keyword" :placeholder="$t('works.placeholder.1')" clearable style="width: 280px">
+        <el-input v-model="form.keyword" placeholder="关键字" clearable style="width: 280px">
           <template #append>
-            <el-button type="primary" icon="Search" @click="search" class="search-btn no-border">{{ $t('button.search') }}</el-button>
+            <el-button type="primary" icon="Search" @click="search" class="search-btn no-border">搜索</el-button>
           </template>
         </el-input>
       </el-form-item>
     </el-form>
-    <el-button type="primary" icon="plus" @click="addDialogVisible = true">{{ $t('button.add') }}</el-button>
+    <div>
+      <el-button type="primary" icon="refresh" @click="loadListData">刷新</el-button>
+      <el-button type="primary" icon="plus" @click="addDialogVisible = true">添加</el-button>
+    </div>
   </div>
 
   <el-table v-loading="loading" :data="tableData" border style="width: 100%" height="calc(100% - 106px)">
     <el-table-column prop="id" label="ID" align="center" width="100" fixed="left"></el-table-column>
 
-    <el-table-column :label="$t('works.name')" min-width="240" fixed="left">
-      <template #default="scope">
-        <div class="d-flex flex-align-center">
-          <el-image
-              :src="cover(scope.row.cover, 'xs')"
-              style="width: 48px; height: 48px; margin-right: 10px;"
-          >
-            <template #error>
-              <div class="images-slot d-flex flex-justify-center flex-align-center">
-                <el-icon><Picture /></el-icon>
-              </div>
-            </template>
-          </el-image>
-          <span>{{ scope.row.name }}</span>
-        </div>
-      </template>
+    <el-table-column prop="title" label="标题" min-width="240" fixed="left">
     </el-table-column>
 
-    <el-table-column :label="$t('works.author')" width="200">
+    <el-table-column label="作者" width="200">
       <template #default="scope">
         <el-tooltip :content="`ID: ${scope.row.user.id}`" placement="top">
           <span>{{ scope.row.user.nickname }}</span>
@@ -91,23 +80,27 @@
     </el-table-column>
   </el-table>
 
+  <work-add :dialog-visible="addDialogVisible" @close="addDialogVisible = false" @success="loadListData"></work-add>
+  <work-edit :form="formData" :dialog-visible="editDialogVisible" @close="editDialogVisible = false" @success="loadListData"></work-edit>
   <custom-pagination :page="pagination" @sizeChange="sizeChange" @currentChange="currentChange"></custom-pagination>
 </template>
 
 <script>
-import tools from '@/utils/tools'
 import list from '@/mixins/list'
 import WorksRequest from "@/api/works";
 import CustomPagination from '@/components/pagination'
+import WorkAdd from "@/views/works/add";
+import WorkEdit from "@/views/works/edit";
+import RoleRequest from "@/api/role";
 
 export default {
   name: "works-list",
   mixins: [list],
-  components: { CustomPagination },
+  components: {WorkAdd, WorkEdit, CustomPagination },
   data () {
     return {
       form: {
-        onsale: '-1',
+        status: '',
         author: '',
         keyword: ''
       }
@@ -130,16 +123,29 @@ export default {
         this.loading = false
         this.tableData = res.data
         this.pagination = res.pagination
-        this.pagination.pageNum = this.size
       }).catch(err => {
         this.loading = false
         this.$message.error(err || this.$t('message.getFail'))
       })
     },
-    handleDelete() {},
-    handleEdit() {},
-    cover(file, mode) {
-      return tools.cdn(file, mode)
+    handleDelete(work, index) {
+      this.$messageBox.confirm('').then((action) => {
+        if (action === 'confirm') {
+          RoleRequest.delete(work.id).then(() => {
+            this.$message.success(this.$t('message.operateSuccess'))
+            this.tableData.splice(index, 1)
+          }).catch(err => {
+            // console.log(err)
+            this.$message.error(err || this.$t('message.operateFail'))
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    handleEdit(work) {
+      this.formData = Object.assign({}, work)
+      this.editDialogVisible = true
     },
   }
 }

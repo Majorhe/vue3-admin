@@ -34,12 +34,11 @@ export default {
     form() {
       return {
         name: '',
-        title: '',
-        parentid: this.pid,
+        route: '',
+        pid: this.pid,
         icon: '',
         status: 1,
         type: 2,
-        listorder: 100
       }
     }
   },

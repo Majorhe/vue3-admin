@@ -1,18 +1,17 @@
 import { request } from './request'
-import AccountModel from '@/models/account'
 import PaginationModel from '@/models/pagination'
 
 export default {
-    login (username, pwd) {
-        return request('post', '/login', {name: username, password: pwd})
+    login (username, pwd, code) {
+        return request('post', '/login', {name: username, password: pwd, code: code})
     },
     logout () {
-
+        return request('post', '/logout')
     },
     list(params) {
-        return request('get', '/admin', params).then(res => {
+        return request('get', '/account/list', params).then(res => {
             let result = {}
-            result.data = res.data.map(item => { return AccountModel.withResponse(item) })
+            result.data = res.data
             Object.defineProperty(result, 'pagination', {
                 value: PaginationModel.withResponse(res),
                 enumerable: true,
@@ -22,12 +21,12 @@ export default {
         })
     },
     add(data) {
-        return request('post', '/admin', data)
+        return request('post', '/account/add', data)
     },
     update(data) {
-        return request('put', `/admin/${data.id}`, data)
+        return request('put', `/account/edit/${data.id}`, data)
     },
     del(id) {
-        return request('delete', `/admin/${id}`)
+        return request('delete', `/account/delete/${id}`)
     }
 }

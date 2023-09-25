@@ -2,21 +2,21 @@ import { request } from './request'
 
 export default {
     list (params) {
-        return request('get', '/auth_rule', params)
+        return request('get', '/menu/list', params)
     },
     detail (id) {
-        return request('get', `/auth_rule/${id}`)
+        return request('get', `/menu/${id}`)
     },
     add (data) {
-        return request('post', '/auth_rule', data)
+        return request('post', '/menu/add', data)
     },
     update (data) {
-        return request('put', `/auth_rule/${data.id}`, data)
+        return request('put', `/menu/edit/${data.id}`, data)
     },
     del (id) {
-        return request('delete', `/auth_rule/${id}`)
+        return request('delete', `/menu/delete/${id}`)
     },
     switch (id, status) {
-        return request('post', `/auth_rule/${id}/set_status`, {status: status})
+        return request('post', `/menu/switch/${id}`, {status: status})
     }
 }

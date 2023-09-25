@@ -9,30 +9,46 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <el-button type="primary" icon="plus" @click="addDialogVisible = true">{{ $t('button.add') }}</el-button>
+    <div>
+      <el-button type="primary" icon="refresh" @click="loadListData">刷新</el-button>
+      <el-button type="primary" icon="plus" @click="addDialogVisible = true">添加</el-button>
+    </div>
   </div>
 
   <el-table v-loading="loading" :data="tableData" border style="width: 100%" height="calc(100% - 106px)">
     <el-table-column prop="id" label="ID" align="center" width="120">
     </el-table-column>
 
-    <el-table-column prop="name" :label="$t('account.name')">
+    <el-table-column prop="name" label="用户名" width="120" fixed="left"></el-table-column>
+
+    <el-table-column prop="phone" label="手机号" width="120"></el-table-column>
+
+    <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
+
+    <el-table-column prop="email" label="状态" width="200">
+      <template #default="scope">
+        <span v-if="scope.row.status == -1" style="color: var(--el-color-danger)">已删除</span>
+        <span v-else-if="scope.row.status == 1" style="color: var(--el-color-success)">正常</span>
+        <span v-else-if="scope.row.status == 2" style="color: var(--el-color-warning)">已冻结</span>
+      </template>
     </el-table-column>
 
-    <el-table-column prop="title" :label="$t('account.title')">
+    <el-table-column label="所属管理员组" width="300">
       <template #default="scope">
-        <span v-if="scope.row.groupId || scope.row.title">{{ scope.row.title }}</span>
+        <div v-if="scope.row.role" style="color: var(--el-color-primary)">
+          {{ scope.row.role.replaceAll(',', ' | ') }}
+        </div>
         <span v-else style="color: var(--el-color-error)">未分组</span>
       </template>
     </el-table-column>
 
-    <el-table-column prop="createdAt" :label="$t('account.createdAt')" width="200">
-    </el-table-column>
+    <el-table-column prop="position" label="职位" width="200"></el-table-column>
 
-    <el-table-column prop="lastLoginTime" :label="$t('account.lastLoginAt')" width="200">
-    </el-table-column>
+    <el-table-column prop="created_at" label="创建时间" width="200"></el-table-column>
 
-    <el-table-column :label="$t('button.operate')" width="240">
+    <el-table-column prop="last_login_at" label="最后登录时间" width="200"></el-table-column>
+
+    <el-table-column label="操作" width="240" fixed="right">
       <template #default="scope">
         <el-button size="small" type="danger" icon="DeleteFilled" @click="handleDelete(scope.row, scope.$index)">
           {{ $t('button.delete') }}
@@ -73,7 +89,7 @@ export default {
   methods: {
     loadListData() {
       this.loading = true
-      let params = {page_num: this.size, page: this.current}
+      let params = {size: this.size, page: this.current}
       if (this.form.keyword !== '') {
         params.keyword = this.form.keyword
       }
@@ -81,17 +97,19 @@ export default {
         this.loading = false
         this.tableData = res.data
         this.pagination = res.pagination
-        this.pagination.pageNum = this.size
       }).catch(err => {
         this.loading = false
-        this.$message.error(err || this.$t('message.getFail'))
+        this.$message.error(err || '获取数据失败')
       })
     },
     handleEdit(data) {
       this.formData = {
         id: data.id,
         name: data.name,
-        auth_group_id: data.groupId
+        phone: data.phone,
+        email: data.email,
+        position: data.position,
+        role: data.role ? data.role_id.split(',').map(item => { return parseInt(item) }) : '',
       }
       this.editDialogVisible = true
     },

@@ -2,27 +2,24 @@ import { request } from './request'
 
 export default {
     list (params) {
-        return request('get', '/auth_group', params)
-    },
-    all () {
-        return request('get', '/get_auth_group')
-    },
-    detail (id) {
-        return request('get', `/auth_group/${id}`)
+        return request('get', '/role/list', params)
     },
     add (data) {
-        return request('post', '/auth_group', data)
+        return request('post', '/role/add', data)
     },
     update (data) {
-        return request('put', `/auth_group/${data.id}`, data)
+        return request('put', `/role/edit/${data.id}`, data)
     },
     del (id) {
-        return request('delete', `/auth_group/${id}`)
+        return request('delete', `/role/delete/${id}`)
+    },
+    switch (id) {
+        return request('post', `/role/switch/${id}`)
     },
     authorizeList(id) {
-        return request('get', `/auth_group/grant/${id}`)
+        return request('get', `/role/menu/${id}`)
     },
-    authorize(id, data) {
-        return request('post', `/auth_group/grant/${id}`, data)
+    authorize(id, menu) {
+        return request('post', `/role/menu/${id}`, menu)
     }
 }

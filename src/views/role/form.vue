@@ -1,11 +1,8 @@
 <template>
   <div>
     <el-form :model="form" :rules="rules" label-width="100px" ref="roleForm" size="large">
-      <el-form-item :label="$t('role.title')" prop="title">
-        <el-input v-model="form.title" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('role.description')" prop="description">
-        <el-input v-model="form.description" type="textarea" autocomplete="off"></el-input>
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
       <div style="text-align: right">
         <el-form-item>
@@ -30,8 +27,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          title: '',
-          description: ''
+          name: ''
         }
       },
     }
@@ -45,8 +41,7 @@ export default {
     return {
       form: this.data,
       rules: {
-        title: [{ required: true, message: this.$t('role.validate.title'), trigger: 'blur' }],
-        description: [{ required: true, message: this.$t('role.validate.description'), trigger: 'blur' }],
+        name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
       }
     }
   },

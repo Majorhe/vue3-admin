@@ -1,16 +1,16 @@
 <template>
-  <el-dialog :title="$t('issued.editFormTitle')" v-model="visible" @close="handleClose" center width="640px">
-    <issued-form ref="issuedForm" :data="form" :loading="loading" @cancel="handleCancel" @confirm="handleConfirm"></issued-form>
+  <el-dialog :title="$t('role.editFormTitle')" v-model="visible" @close="handleClose" center width="70vw">
+    <work-form ref="workForm" :data="form" :loading="loading" @cancel="handleCancel" @confirm="handleConfirm"></work-form>
   </el-dialog>
 </template>
 
 <script>
-import IssuedRequest from '@/api/issued'
-import IssuedForm from './form'
+import WorkRequest from '@/api/works'
+import WorkForm from './form'
 
 export default {
-  name: 'issued-edit',
-  components: {IssuedForm},
+  name: 'work-edit',
+  components: {WorkForm},
   emits: ['success', 'close'],
   props: {
     dialogVisible: {
@@ -39,19 +39,19 @@ export default {
   },
   methods: {
     handleConfirm (form) {
-      IssuedRequest.update(form).then(() => {
+      WorkRequest.update(form).then(() => {
         this.visible = false
-        this.$message.success(this.$t('message.operateSuccess'))
+        this.$message.success('编辑成功')
         this.$emit('success')
       }).catch(err => {
-        this.$message.error(err || this.$t('message.operateFail'))
+        this.$message.error(err || '操作失败')
       })
     },
     handleCancel () {
       this.visible = false
     },
     handleClose () {
-      this.$refs['issuedForm'].resetFormFields()
+      this.$refs['workForm'].resetFormFields()
     }
   }
 }

@@ -1,16 +1,16 @@
 <template>
-  <el-dialog :title="$t('issued.addFormTitle')" v-model="visible" @close="handleClose" center width="640px">
-    <issued-form ref="issuedForm" :loading="loading" @cancel="handleCancel" @confirm="handleConfirm"></issued-form>
+  <el-dialog title="作品添加" v-model="visible" @close="handleClose" center width="70vw">
+    <work-form ref="workForm" :loading="loading" @cancel="handleCancel" @confirm="handleConfirm"></work-form>
   </el-dialog>
 </template>
 
 <script>
-import IssuedRequest from '@/api/issued'
-import IssuedForm from './form'
+import WorkRequest from '@/api/works'
+import WorkForm from './form'
 
 export default {
-  name: 'issued-add',
-  components: {IssuedForm},
+  name: 'work-add',
+  components: {WorkForm},
   emits: ['success', 'close'],
   props: {
     dialogVisible: {
@@ -36,9 +36,9 @@ export default {
   methods: {
     handleConfirm (form) {
       this.loading = true
-      IssuedRequest.add(form).then(() => {
+      WorkRequest.add(form).then(() => {
         this.visible = false
-        this.$message.success(this.$t('message.operateSuccess'))
+        this.$message.success('添加成功')
         this.loading = false
         this.$emit('success')
       }).catch(err => {
@@ -51,7 +51,7 @@ export default {
       this.visible = false
     },
     handleClose () {
-      this.$refs['issuedForm'].resetFormFields()
+      this.$refs['workForm'].resetFormFields()
     }
   }
 }

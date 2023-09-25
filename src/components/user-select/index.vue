@@ -9,7 +9,7 @@
       @change="handleChange"
       style="width: 100%"
   >
-    <el-option v-for="(opt, index) in options" :key="index" :label="opt.label" :value="opt.value"></el-option>
+    <el-option v-for="(opt, index) in options" :key="index" :label="`[${opt.id}]${opt.name}`" :value="opt.id"></el-option>
   </el-select>
 </template>
 
@@ -26,7 +26,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Please enter a keyword'
+      default: '用户名/手机'
     }
   },
   computed: {

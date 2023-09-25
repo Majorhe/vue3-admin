@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="$t('button.authorize')" v-model="visible" @close="close" center width="640px" :destroy-on-close="true">
-    <el-scrollbar height="500px">
+  <el-dialog title="菜单设置" v-model="visible" @close="close" center width="640px" :destroy-on-close="true">
+    <el-scrollbar height="50vh">
       <el-tree
           ref="authorizeTree"
           v-loading="loading"
@@ -24,7 +24,7 @@ export default {
     return {
       loading: false,
       visible: false,
-      roleId: null,
+      role: {},
       treeData: [],
       defaultExpandedKeys: []
     }
@@ -34,24 +34,26 @@ export default {
       this.loading = true
       RoleRequest.authorizeList(id).then(res => {
         if (this.treeData.length == 0) {
-          this.toTreeData(res.data)
+          this.toTreeData(res.menu)
         }
-        this.defaultExpandedKeys = res.rule
-        this.$refs.authorizeTree.setCheckedKeys(res.rule)
+        this.defaultExpandedKeys = res.roleMenu.map(item => { return item.menu_id })
+        this.$refs.authorizeTree.setCheckedKeys(this.defaultExpandedKeys)
         this.loading = false
       }).catch(() => {
         this.loading = false
-        this.$message.error(this.$t('message.getFail'))
+        this.$message.error('获取数据失败')
       })
     },
     authorize() {
       this.loading = true
-      RoleRequest.authorize(this.roleId, { rules: this.$refs.authorizeTree.getCheckedKeys(),
-            halfrules: this.$refs.authorizeTree.getHalfCheckedKeys()
-      }).then(() => {
+      let menu = [
+        ...this.$refs.authorizeTree.getCheckedKeys(),
+        ...this.$refs.authorizeTree.getHalfCheckedKeys()
+      ]
+      RoleRequest.authorize(this.role.id, {'menu': menu}).then(() => {
         this.visible = false
         this.loading = false
-        this.$message.success(this.$t('message.operateSuccess'))
+        this.$message.success('设置成功')
       }).catch(err => {
         this.loading = false
         this.$message.error(err)
@@ -61,12 +63,12 @@ export default {
       const func = function formatMenuList(lists, pid) {
         let treeData = []
         for (let i = 0; i < lists.length; i++) {
-          if (lists[i].parentid === pid) {
+          if (lists[i].pid === pid) {
             lists[i].children = func(lists, lists[i].id)
             lists[i].leaf = lists[i].children.length === 0
             let obj = {
               id: lists[i].id,
-              label: lists[i].title,
+              label: lists[i].name,
               children: func(lists, lists[i].id)
             }
             treeData.push(obj)
@@ -76,10 +78,10 @@ export default {
       }
       this.treeData = func(data, 0)
     },
-    open(id) {
+    open(role) {
       this.visible = true
-      this.roleId = id
-      this.getAuthorizeList(id)
+      this.role = role
+      this.getAuthorizeList(role.id)
     },
     close() {
       this.visible = false

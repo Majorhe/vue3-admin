@@ -24,14 +24,14 @@ module.exports = defineConfig({
   },
   devServer: {
     proxy: {
-      '/api': {
-        // 此处的写法，目的是为了 将 /api 替换成 https://test.domain.com/
-        target: 'https://xn--0zwm56d.lanmsz.com/',
+      '/dev': {
+        // 此处的写法，目的是为了 将 /api 替换成 target
+        target: 'http://localhost:8088',
         // 允许跨域
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          '^/api': ''
+          '^/dev': ''
         }
       }
     }

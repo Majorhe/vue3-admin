@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('role.addFormTitle')" v-model="visible" @close="handleClose" center width="640px">
+  <el-dialog :title="$t('role.addFormTitle')" v-model="visible" @close="handleClose" center width="500px">
     <role-form ref="roleForm" :loading="loading" @cancel="handleCancel" @confirm="handleConfirm"></role-form>
   </el-dialog>
 </template>

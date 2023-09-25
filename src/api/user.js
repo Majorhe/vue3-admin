@@ -3,7 +3,7 @@ import PaginationModel from "@/models/pagination";
 
 export default {
     list (params) {
-        return request('get', '/users', params).then(res => {
+        return request('get', '/user/list', params).then(res => {
             let result = {}
             result.data = res.data
             Object.defineProperty(result, 'pagination', {
@@ -14,22 +14,19 @@ export default {
             return Promise.resolve(result)
         })
     },
-    all () {
-        return request('get', '/users')
-    },
     detail (id) {
-        return request('get', `/users/${id}`)
+        return request('get', `/user/${id}`)
     },
     add (data) {
-        return request('post', '/users', data)
+        return request('post', '/user', data)
     },
     update (data) {
-        return request('put', `/users/${data.id}`, data)
+        return request('put', `/user/${data.id}`, data)
     },
-    del (id) {
-        return request('delete', `/users/${id}`)
+    delete (id) {
+        return request('delete', `/user/${id}`)
     },
     search(params) {
-        return request('get', '/users/search', params)
+        return request('get', '/user/search', params)
     }
 }

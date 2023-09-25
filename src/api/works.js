@@ -3,7 +3,7 @@ import PaginationModel from "@/models/pagination";
 
 export default {
     list (params) {
-        return request('get', '/works', params).then(res => {
+        return request('get', '/works/list', params).then(res => {
             let result = {}
             result.data = res.data
             Object.defineProperty(result, 'pagination', {

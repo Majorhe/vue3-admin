@@ -14,6 +14,9 @@ export default {
         }
     },
     methods: {
+        reloadListData() {
+            this.loadListData()
+        },
         search () {
             this.current = 1
             this.loadListData()

@@ -3,8 +3,9 @@
     <el-container class="layout-container">
       <el-header class="no-padding">
         <div class="logo-wrapper d-flex flex-align-center">
-          <el-image :src="require('@/assets/logo.png')" style="width: 30px; height: 30px"></el-image>
-          <h3 style="margin-left: 10px">{{ title }}</h3>
+<!--          <el-image :src="require('@/assets/logo.png')" style="width: 30px; height: 30px"></el-image>-->
+<!--          <h3 style="margin-left: 10px">{{ title }}</h3>-->
+          <h3 style="margin-left: 10px">图书管理系统</h3>
         </div>
         <div class="header-section-wrapper d-flex flex-justify-between flex-align-center">
           <el-breadcrumb separator-icon="ArrowRight">

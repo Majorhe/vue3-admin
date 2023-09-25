@@ -1,23 +1,34 @@
 <template>
   <div>
     <el-form :model="form" :rules="rules" label-width="140px" ref="accountForm" size="large">
-      <el-form-item :label="$t('account.name')" prop="name">
+      <el-form-item label="用户名称" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('account.password')" prop="password">
-        <el-input v-model="form.password" type="password" autocomplete="off"></el-input>
+      <el-form-item label="手机" prop="phone">
+        <el-input v-model="form.phone" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('account.rePassword')" prop="password_confirmation">
-        <el-input v-model="form.password_confirmation" type="password" autocomplete="off"></el-input>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="form.email" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('account.title')" prop="auth_group_id">
-        <el-select v-model="form.auth_group_id" style="width: 60%">
-          <el-option v-for="(item, index) in groupList" :key="index" :label="item.title" :value="item.id"></el-option>
+      <el-form-item label="职位" prop="position">
+        <el-input v-model="form.position" autocomplete="off"></el-input>
+      </el-form-item>
+      <template v-if="form.id == undefined">
+        <el-form-item label="用户密码" prop="password">
+          <el-input v-model="form.password" type="password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="重复密码" prop="password_confirmation">
+          <el-input v-model="form.password_confirmation" type="password" autocomplete="off"></el-input>
+        </el-form-item>
+      </template>
+      <el-form-item label="所属角色" prop="role">
+        <el-select multiple v-model="form.role" style="width: 100%">
+          <el-option v-for="(item, index) in roleList" :key="index" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <div style="text-align: right">
         <el-form-item>
-          <el-button :loading="loading" :disabled="loading" type="primary" @click="confirm">{{ $t('button.confirm') }}</el-button>
+          <el-button :loading="loading" :disabled="loading" type="primary" @click="confirm">确认</el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -40,9 +51,12 @@ export default {
       default: () => {
         return {
           name: '',
+          phone: '',
+          email: '',
+          position: '',
           password: '',
           password_confirmation: '',
-          auth_group_id: '',
+          role: '',
         }
       },
     }
@@ -57,13 +71,15 @@ export default {
   },
   data () {
     return {
-      groupList: [],
+      roleList: [],
       form: this.data,
       rules: {
-        name: [{ required: true, message: this.$t('account.validate.name'), trigger: 'blur' }],
-        password: [{ required: true, message: this.$t('account.validate.password'), trigger: 'blur' }],
+        name: [{ required: true, message: '管理员名称不能为空', trigger: 'blur' }],
+        phone: [{ required: true, message: '手机号码不能为空', trigger: 'blur' }],
+        email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
         password_confirmation: [{ required: true, validator: this.checkPassword, trigger: 'blur' }],
-        auth_group_id: [{ required: true, message: this.$t('account.validate.groupId'), trigger: 'blur' }],
+        role: [{ required: true, message: '管理员所属角色不能为空', trigger: 'blur' }],
       }
     }
   },
@@ -84,18 +100,18 @@ export default {
     },
     checkPassword(rule, value, callback) {
       if (value === '') {
-        callback(new Error(this.$t('account.validate.rePassword')))
+        callback(new Error('确认密码不能为空'))
       } else if (value !== this.form.password) {
-        callback(new Error(this.$t('account.validate.passwordNotMatch')))
+        callback(new Error('两次密码不一致'))
       } else {
         callback()
       }
     },
     getAuthGroup() {
-      RoleRequest.all().then(res => {
-        this.groupList = res.data
+      RoleRequest.list().then(res => {
+        this.roleList = res
       }).catch(err => {
-        this.$message.error(err || this.$t('message.getFail'))
+        this.$message.error(err || '获取角色数据失败')
       })
     },
     resetFormFields () {

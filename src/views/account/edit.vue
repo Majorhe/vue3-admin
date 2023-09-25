@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('account.editFormTitle')" v-model="visible" @close="handleClose" center width="640px">
+  <el-dialog title="编辑管理员" v-model="visible" @close="handleClose" center width="640px">
     <account-form ref="accountForm" :data="form" :loading="loading" @cancel="handleCancel" @confirm="handleConfirm"></account-form>
   </el-dialog>
 </template>
